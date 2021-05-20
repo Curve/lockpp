@@ -23,12 +23,22 @@ namespace sxl
         }
 
       public:
+        var_t copy()
+        {
+            std::lock_guard lock(mutex);
+            return value;
+        }
         var_t &get_unsafe()
         {
             return value;
         }
         const var_t &get_unsafe() const
         {
+            return value;
+        }
+        const var_t copy() const
+        {
+            std::lock_guard lock(mutex);
             return value;
         }
 
