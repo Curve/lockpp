@@ -35,24 +35,24 @@ namespace sxl
         locked_var<var_t, mutex_t> scoped()
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
         const locked_var<var_t, mutex_t> scoped() const
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
 
       public:
         locked_var<var_t, mutex_t> operator*()
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
         locked_var<var_t, mutex_t> operator->()
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
         operator var_t()
         {
@@ -63,12 +63,12 @@ namespace sxl
         const locked_var<var_t, mutex_t> operator->() const
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
         const locked_var<var_t, mutex_t> operator*() const
         {
             mutex.lock();
-            return locked_var<var_t, mutex_t>(value, &mutex);
+            return locked_var<var_t, mutex_t>(value, mutex);
         }
         operator const var_t() const
         {

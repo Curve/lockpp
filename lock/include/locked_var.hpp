@@ -10,12 +10,12 @@ namespace sxl
     class locked_var
     {
         var_t &value;
-        mutex_t *mutex;
+        mutex_t &mutex;
 
       public:
-        locked_var(var_t &value, mutex_t *mutex) : value(value), mutex(mutex) {}
-        locked_var(var_t &&value, mutex_t *mutex) : value(value), mutex(mutex) {}
-        locked_var(const locked_var &other, mutex_t *mutex) : value(other.value), mutex(mutex) {}
+        locked_var(var_t &value, mutex_t &mutex) : value(value), mutex(mutex) {}
+        locked_var(var_t &&value, mutex_t &mutex) : value(value), mutex(mutex) {}
+        locked_var(const locked_var &other, mutex_t &mutex) : value(other.value), mutex(mutex) {}
 
         ~locked_var()
         {
@@ -26,13 +26,13 @@ namespace sxl
         }
 
       public:
-        void free()
+        void unlock()
         {
-            if (mutex)
-            {
-                mutex->unlock();
-                mutex = nullptr;
-            }
+            mutex->unlock();
+        }
+        void lock()
+        {
+            mutex->lock();
         }
 
       public:
