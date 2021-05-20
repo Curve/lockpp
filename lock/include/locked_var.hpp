@@ -19,20 +19,17 @@ namespace sxl
 
         ~locked_var()
         {
-            if (mutex)
-            {
-                mutex->unlock();
-            }
+            mutex.unlock();
         }
 
       public:
         void unlock()
         {
-            mutex->unlock();
+            mutex.unlock();
         }
         void lock()
         {
-            mutex->lock();
+            mutex.lock();
         }
 
       public:
