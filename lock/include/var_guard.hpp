@@ -59,6 +59,10 @@ namespace sxl
             mutex.lock();
             return locked_var<var_t, mutex_t>(value, mutex);
         }
+        var_t &operator~()
+        {
+            return value;
+        }
         locked_var<var_t, mutex_t> operator->()
         {
             mutex.lock();
@@ -79,6 +83,10 @@ namespace sxl
         {
             mutex.lock();
             return locked_var<var_t, mutex_t>(value, mutex);
+        }
+        const var_t &operator~() const
+        {
+            return value;
         }
         operator const var_t() const
         {
