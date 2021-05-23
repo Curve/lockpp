@@ -11,6 +11,7 @@ namespace sxl
     {
         var_t &value;
         mutex_t &mutex;
+        std::atomic<bool> wasUnlocked = false;
 
       public:
         locked_var(var_t &value, mutex_t &mutex) : value(value), mutex(mutex) {}
@@ -19,17 +20,22 @@ namespace sxl
 
         ~locked_var()
         {
-            mutex.unlock();
+            if (!wasUnlocked)
+            {
+                mutex.unlock();
+            }
         }
 
       public:
         void unlock()
         {
             mutex.unlock();
+            wasUnlocked = true;
         }
         void lock()
         {
             mutex.lock();
+            wasUnlocked = false;
         }
 
       public:
