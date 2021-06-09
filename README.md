@@ -29,7 +29,7 @@ int main()
 
     {
         auto readAccess = test.read();
-        // readAccess->append("Test"); //! Won't work, is append is not const
+        // readAccess->append("Test"); //! Won't work, append is not const
         std::cout << *readAccess << std::endl;
     }
 
