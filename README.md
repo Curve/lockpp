@@ -11,26 +11,27 @@ A cross-platform C++17 library that manages mutex protection for objects.
 
 ## Example
 ```cpp
-#include <var_guard.hpp>
+#include <iostream>
+#include <lock.hpp>
 #include <string>
 
 int main()
 {
-    sxl::var_guard<std::string> test = "Test";
+    sxl::lock<std::string> test("Test");
 
     {
         // Test is now locked until the scope is exited.
-        auto scoped = test.scoped();
+        auto writeAccess = test.write();
 
-        scoped->append("1");
-        scoped = "Some other test";
-
-        std::string &val = *scoped;
-        val.erase(val.begin());
-        // Test is now no longer locked.
+        writeAccess->append("1");
+        *writeAccess = "Some other test";
     }
 
-    test->clear(); // Test is only locked for single operation.
+    {
+        auto readAccess = test.read();
+        // readAccess->append("Test"); //! Won't work, is append is not const
+        std::cout << *readAccess << std::endl;
+    }
 
     return 0;
 }

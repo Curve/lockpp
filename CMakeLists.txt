@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(lockpp VERSION 1.0 DESCRIPTION "A C++ Library to manage mutex guarding variables")
+project(lockpp VERSION 2.0 DESCRIPTION "A C++ Library to manage mutex guarding variables")
 
 add_library(lockpp INTERFACE)
 target_include_directories(lockpp INTERFACE lock/include)
