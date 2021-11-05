@@ -12,7 +12,7 @@ A C++17 library that provides mutex protection for objects
         <img src="https://img.shields.io/github/workflow/status/Soundux/lockpp/Test%20on%20Windows?label=Windows%20Build&style=flat-square" alt="Windows Build" />
     </a>
     <a href="https://github.com/Soundux/lockpp/blob/master/LICENSE">
-        <img src="https://img.shields.io/github/license/Curve/imgui-cmake.svg?style=flat-square" alt="License" />
+        <img src="https://img.shields.io/github/license/Soundux/lockpp.svg?style=flat-square" alt="License" />
     </a>
 </p>
 
