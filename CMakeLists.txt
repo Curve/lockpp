@@ -37,9 +37,9 @@ if (lockpp_tests)
     
     if (UNIX)
         target_link_libraries(${PROJECT_NAME}_tests PRIVATE pthread)
+        target_compile_options(${PROJECT_NAME}_tests INTERFACE -Wall -Werror -Wextra -pedantic)
     endif()
     
     target_compile_features(${PROJECT_NAME}_tests INTERFACE cxx_std_17)
-    target_compile_options(${PROJECT_NAME}_tests INTERFACE -Wall -Werror -Wextra -pedantic)
     set_target_properties(${PROJECT_NAME}_tests PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 endif()
