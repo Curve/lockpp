@@ -19,7 +19,7 @@ template <typename T> class allows_copy
     static const bool value = sizeof(test(reinterpret_cast<T *>(0))) == sizeof(std::uint16_t);
 };
 
-TEST_CASE("Check if immovable types are handled correctly", "[immovable_types]")
+TEST_CASE("Check if moveable-only types are handled correctly", "[moveable_types]")
 {
     lockpp::lock<std::unique_ptr<int>> test(std::make_unique<int>(10));
 
