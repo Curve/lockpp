@@ -6,6 +6,8 @@ project(lockpp LANGUAGES CXX VERSION 1.0)
 # --------------------------------------------------------------------------------------------------------
 
 add_library(${PROJECT_NAME} INTERFACE)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
@@ -43,3 +45,10 @@ if (lockpp_tests)
     target_compile_features(${PROJECT_NAME}_tests INTERFACE cxx_std_17)
     set_target_properties(${PROJECT_NAME}_tests PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 endif()
+
+# --------------------------------------------------------------------------------------------------------
+# Install Targets
+# --------------------------------------------------------------------------------------------------------
+
+install(DIRECTORY "include/" TYPE INCLUDE)
+install(TARGETS ${PROJECT_NAME} INCLUDES DESTINATION include)
