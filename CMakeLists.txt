@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(lockpp LANGUAGES CXX VERSION 1.0)
+project(lockpp LANGUAGES CXX VERSION 1.0.2)
 
 # --------------------------------------------------------------------------------------------------------
 # Create library
