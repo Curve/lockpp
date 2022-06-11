@@ -49,7 +49,7 @@ set(lockpp_tests OFF)
 
 ### Simple example
 ```cpp
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 
 int main()
 {
@@ -74,7 +74,7 @@ int main()
 
 ### Custom Mutex
 ```cpp
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 
 int main()
 {
@@ -95,7 +95,7 @@ int main()
 
 ### Custom Locks
 ```cpp
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 
 int main()
 {
