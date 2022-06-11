@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 
 TEST_CASE("Check if custom mutexes work", "[custom_mutex]")
 {

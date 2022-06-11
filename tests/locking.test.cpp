@@ -1,8 +1,7 @@
 #define CONFIG_CATCH_MAIN
 #include <catch2/catch.hpp>
-
 #include <future>
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 #include <thread>
 
 TEST_CASE("Check if simultaneous access causes dead-lock", "[locking]")

@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 #include <string>
 
 TEST_CASE("Check assign & copy", "[assign_copy]")

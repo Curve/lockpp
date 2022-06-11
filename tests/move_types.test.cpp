@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include <lock.hpp>
+#include <lockpp/lock.hpp>
 
 template <typename T> class allows_assign
 {
