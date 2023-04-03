@@ -1,4 +1,5 @@
 Checks: "*,\
+  -google-readability-todo,\
   -google-runtime-int,\
   -google-explicit-constructor,\
   -llvm-header-guard,\
@@ -24,13 +25,11 @@ Checks: "*,\
   -clang-diagnostic-padded,\
   -modernize-concat-nested-namespaces,\
   -altera-struct-pack-align,\
-  -modernize-use-nodiscard,\
   -misc-non-private-member-variables-in-classes,\
   -cppcoreguidelines-pro-type-member-init,\
   -fuchsia-statically-constructed-objects,\
   -cppcoreguidelines-avoid-non-const-global-variables,\
   -readability-function-cognitive-complexity,\
-  -modernize-use-emplace,\
   -cppcoreguidelines-interfaces-global-init,\
   -modernize-loop-convert,\
   -modernize-avoid-c-arrays,\
@@ -41,7 +40,6 @@ Checks: "*,\
   -readability-redundant-access-specifiers,\
   -readability-convert-member-functions-to-static,\
   -readability-implicit-bool-conversion,\
-  -bugprone-inaccurate-erase,\
   -readability-uppercase-literal-suffix,\
   -hicpp*,\
   -readability-braces-around-statements,\
@@ -55,4 +53,7 @@ Checks: "*,\
   -altera-*,\
   -performance-no-int-to-ptr,\
   -readability-named-parameter,\
-  -bugprone-easily-swappable-parameters"
+  -bugprone-easily-swappable-parameters,\
+  -readability-identifier-length,\
+  -llvm-include-order,\
+  -cppcoreguidelines-avoid-const-or-ref-data-members"
