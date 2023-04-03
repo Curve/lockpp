@@ -1,8 +1,11 @@
+<div align="center"> 
+    <img src="assets/logo.png" height=312>
+</div>
 
-<h3 align="center"> 🔐 lockpp </h1>
+<br/>
 
-<p align="center">
-    A C++20 library that provides mutex protection for objects
+<p align="center"> 
+    A C++20 library that provides mutex protection for any object
 </p>
 
 ---
