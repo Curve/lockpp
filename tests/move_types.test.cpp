@@ -1,23 +1,11 @@
 #include <catch2/catch.hpp>
 #include <lockpp/lock.hpp>
 
-template <typename T> class allows_assign
-{
-    static auto test(...) -> std::uint8_t;
-    template <typename O> static auto test(O *) -> decltype(std::declval<O>().assign(std::declval<std::unique_ptr<int> &>()), std::uint16_t{});
+template <typename T, typename O>
+concept allows_assign = requires(T &t, O &o) { t.assign(o); };
 
-  public:
-    static const bool value = sizeof(test(reinterpret_cast<T *>(0))) == sizeof(std::uint16_t);
-};
-
-template <typename T> class allows_copy
-{
-    static auto test(...) -> std::uint8_t;
-    template <typename O> static auto test(O *) -> decltype(std::declval<O>().copy(), std::uint16_t{});
-
-  public:
-    static const bool value = sizeof(test(reinterpret_cast<T *>(0))) == sizeof(std::uint16_t);
-};
+template <typename T>
+concept allows_copy = requires(T &t) { t.copy(); };
 
 TEST_CASE("Check if moveable-only types are handled correctly", "[moveable_types]")
 {
@@ -27,6 +15,6 @@ TEST_CASE("Check if moveable-only types are handled correctly", "[moveable_types
 
     test.assign(std::move(new_value));
 
-    REQUIRE(allows_copy<decltype(test)>::value == false);
-    REQUIRE(allows_assign<decltype(test)>::value == false);
+    REQUIRE(allows_copy<decltype(test)> == false);
+    REQUIRE(allows_assign<decltype(test), const std::unique_ptr<int> &> == false);
 }

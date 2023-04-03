@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.1)
-project(lockpp LANGUAGES CXX VERSION 1.0.2)
+cmake_minimum_required(VERSION 3.12)
+project(lockpp LANGUAGES CXX VERSION 2.0)
 
 # --------------------------------------------------------------------------------------------------------
 # Create library
@@ -8,8 +8,8 @@ project(lockpp LANGUAGES CXX VERSION 1.0.2)
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 # --------------------------------------------------------------------------------------------------------
 # Include "include" folder
@@ -21,15 +21,17 @@ target_include_directories(${PROJECT_NAME} INTERFACE "include")
 # Run tests
 # --------------------------------------------------------------------------------------------------------
 
-option(lockpp_tests "Run tests" OFF)
+option(lockpp_tests "Run tests" ON)
 
 if (lockpp_tests)
     message(STATUS "Building lockpp tests")
 
     if (NOT TARGET Catch2::Catch2WithMain)
         include(FetchContent)
-        FetchContent_Declare(Catch2 GIT_REPOSITORY "https://github.com/catchorg/Catch2" GIT_TAG v2.13.7)
+
         option(CATCH_BUILD_STATIC_LIBRARY "" ON)
+        FetchContent_Declare(Catch2 GIT_REPOSITORY "https://github.com/catchorg/Catch2" GIT_TAG v2.13.7)
+        
         FetchContent_MakeAvailable(Catch2)
     endif()
 
@@ -42,8 +44,8 @@ if (lockpp_tests)
         target_compile_options(${PROJECT_NAME}_tests INTERFACE -Wall -Werror -Wextra -pedantic)
     endif()
     
-    target_compile_features(${PROJECT_NAME}_tests INTERFACE cxx_std_17)
-    set_target_properties(${PROJECT_NAME}_tests PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
+    target_compile_features(${PROJECT_NAME}_tests INTERFACE cxx_std_20)
+    set_target_properties(${PROJECT_NAME}_tests PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 endif()
 
 # --------------------------------------------------------------------------------------------------------

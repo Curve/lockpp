@@ -1,26 +1,28 @@
 #pragma once
-#include <type_traits>
+#include "traits.hpp"
 
 namespace lockpp
 {
-    template <typename type_t, template <typename> class lock_t, typename mutex_t> class locked
+    template <typename Type, template <typename> class Lock, typename Mutex> //
+    class locked
     {
-        template <typename, typename> friend class lock;
+        template <typename, decayed_type> friend class lock;
 
       private:
-        lock_t<mutex_t> m_lock;
-        std::add_lvalue_reference_t<type_t> m_value;
+        Lock<Mutex> m_lock;
+        std::add_lvalue_reference_t<Type> m_value;
 
       protected:
-        template <typename... lock_args_t> explicit locked(std::add_lvalue_reference_t<type_t>, mutex_t &, lock_args_t &&...);
+        template <typename... LockArgs> //
+        explicit locked(std::add_lvalue_reference_t<Type>, Mutex &, LockArgs &&...);
 
       public:
-        [[nodiscard]] std::add_lvalue_reference_t<type_t> operator*() noexcept;
-        [[nodiscard]] std::add_lvalue_reference_t<type_t> operator*() const noexcept;
+        [[nodiscard]] std::add_lvalue_reference_t<Type> operator*() noexcept;
+        [[nodiscard]] std::add_lvalue_reference_t<Type> operator*() const noexcept;
 
       public:
-        [[nodiscard]] std::add_pointer_t<type_t> operator->() noexcept;
-        [[nodiscard]] std::add_pointer_t<type_t> operator->() const noexcept;
+        [[nodiscard]] std::add_pointer_t<Type> operator->() noexcept;
+        [[nodiscard]] std::add_pointer_t<Type> operator->() const noexcept;
     };
 } // namespace lockpp
 

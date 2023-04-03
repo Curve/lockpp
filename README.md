@@ -1,19 +1,8 @@
 
-<h1 align="center"> 🔐 lockpp </h1>
-<p align="center">
-A C++17 library that provides mutex protection for objects
-</p>
+<h3 align="center"> 🔐 lockpp </h1>
 
 <p align="center">
-    <a href="https://github.com/Soundux/lockpp/actions">
-        <img src="https://img.shields.io/github/workflow/status/Soundux/lockpp/Test%20on%20Linux?label=Linux%20Build&style=flat-square" alt="Linux Build" />
-    </a>
-    <a href="https://github.com/Soundux/lockpp/actions">
-        <img src="https://img.shields.io/github/workflow/status/Soundux/lockpp/Test%20on%20Windows?label=Windows%20Build&style=flat-square" alt="Windows Build" />
-    </a>
-    <a href="https://github.com/Soundux/lockpp/blob/master/LICENSE">
-        <img src="https://img.shields.io/github/license/Soundux/lockpp.svg?style=flat-square" alt="License" />
-    </a>
+    A C++20 library that provides mutex protection for objects
 </p>
 
 ---
@@ -27,7 +16,13 @@ set(lockpp_tests OFF)
 
 
 ## 📎 Installation
+
+> **Note**  
+> This library requires a C++20 capable compiler.
+> In case you need support for C++17 checkout [version 1.0.2](https://github.com/Soundux/lockpp/releases/tag/v1.0.2)
+
 - FetchContent
+
     ```cmake
     include(FetchContent)
     FetchContent_Declare(lockpp GIT_REPOSITORY "https://github.com/Soundux/lockpp")
@@ -35,7 +30,9 @@ set(lockpp_tests OFF)
     FetchContent_MakeAvailable(lockpp)
     target_link_libraries(<YourLibrary> lockpp)
     ```
+
 - Git Submodule
+
     ```bash
     git submodule add "https://github.com/Soundux/lockpp"
     ```

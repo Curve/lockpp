@@ -1,49 +1,66 @@
 #pragma once
+#include "lock.hpp"
 
 namespace lockpp
 {
-    template <typename type_t, typename mutex_t> template <typename... args_t> lock<type_t, mutex_t>::lock(args_t &&...args) : m_value(std::forward<args_t>(args)...) {}
-
-    template <typename type_t, typename mutex_t>
-    template <template <typename> class lock_t, typename... lock_args_t>
-    locked<type_t, lock_t, mutex_t> lock<type_t, mutex_t>::write(lock_args_t &&...lock_args)
+    template <typename Type, decayed_type Mutex>
+    template <typename... Args>
+    lock<Type, Mutex>::lock(Args &&...args) : m_value(std::forward<Args>(args)...)
     {
-        return locked<type_t, lock_t, mutex_t>(m_value, m_mutex, std::forward<lock_args_t>(lock_args)...);
     }
 
-    template <typename type_t, typename mutex_t>
-    template <template <typename> class lock_t, typename... lock_args_t>
-    locked<std::add_const_t<type_t>, lock_t, mutex_t> lock<type_t, mutex_t>::read(lock_args_t &&...lock_args) const
+    template <typename Type, decayed_type Mutex>
+    template <template <typename> class Lock, typename... LockArgs>
+        requires valid_arguments<Lock, Mutex, LockArgs...>
+    locked<Type, Lock, Mutex> lock<Type, Mutex>::write(LockArgs &&...lock_args)
     {
-        return locked<std::add_const_t<type_t>, lock_t, mutex_t>(m_value, m_mutex, std::forward<lock_args_t>(lock_args)...);
+        return locked<Type, Lock, Mutex>{m_value, m_mutex, std::forward<LockArgs>(lock_args)...};
     }
 
-    template <typename type_t, typename mutex_t> template <typename, typename> void lock<type_t, mutex_t>::assign(std::decay_t<type_t> &&value)
+    template <typename Type, decayed_type Mutex>
+    template <template <typename> class Lock, typename... LockArgs>
+        requires valid_arguments<Lock, Mutex, LockArgs...>
+    locked<std::add_const_t<Type>, Lock, Mutex> lock<Type, Mutex>::read(LockArgs &&...lock_args) const
+    {
+        return locked<std::add_const_t<Type>, Lock, Mutex>{m_value, m_mutex, std::forward<LockArgs>(lock_args)...};
+    }
+
+    template <typename Type, decayed_type Mutex>
+    void lock<Type, Mutex>::assign(std::decay_t<Type> &&value)
+        requires std::is_move_assignable_v<Type>
     {
         *write() = std::move(value);
     }
 
-    template <typename type_t, typename mutex_t> template <typename, typename> void lock<type_t, mutex_t>::assign(const std::decay_t<type_t> &value)
+    template <typename Type, decayed_type Mutex>
+    void lock<Type, Mutex>::assign(const std::decay_t<Type> &value)
+        requires std::is_copy_assignable_v<Type>
     {
         *write() = value;
     }
 
-    template <typename type_t, typename mutex_t> std::add_lvalue_reference_t<type_t> lock<type_t, mutex_t>::get_unsafe()
+    template <typename Type, decayed_type Mutex> //
+    std::add_lvalue_reference_t<Type> lock<Type, Mutex>::get_unsafe()
     {
         return m_value;
     }
 
-    template <typename type_t, typename mutex_t> std::add_lvalue_reference_t<type_t> lock<type_t, mutex_t>::get_unsafe() const
+    template <typename Type, decayed_type Mutex> //
+    std::add_lvalue_reference_t<Type> lock<Type, Mutex>::get_unsafe() const
     {
         return m_value;
     }
 
-    template <typename type_t, typename mutex_t> template <typename, typename> std::decay_t<type_t> lock<type_t, mutex_t>::copy()
+    template <typename Type, decayed_type Mutex>
+    std::decay_t<Type> lock<Type, Mutex>::copy()
+        requires std::is_copy_constructible_v<Type>
     {
         return *read();
     }
 
-    template <typename type_t, typename mutex_t> template <typename, typename> std::decay_t<type_t> lock<type_t, mutex_t>::copy() const
+    template <typename Type, decayed_type Mutex>
+    std::decay_t<Type> lock<Type, Mutex>::copy() const
+        requires std::is_copy_constructible_v<Type>
     {
         return *read();
     }

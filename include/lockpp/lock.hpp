@@ -1,40 +1,60 @@
 #pragma once
+#include "traits.hpp"
 #include "locked.hpp"
-#include "mutex_traits.hpp"
+
 #include <mutex>
-#include <shared_mutex>
 #include <type_traits>
+#include <shared_mutex>
 
 namespace lockpp
 {
-    template <typename type_t, typename mutex_t = std::shared_mutex> class lock
+    template <typename Type, decayed_type Mutex = std::shared_mutex> class lock
     {
-        static_assert(std::is_same_v<std::decay_t<mutex_t>, mutex_t>);
-        template <typename _m> using read_lock_t = std::conditional_t<is_shared_lockable<mutex_t>::value, std::shared_lock<_m>, std::lock_guard<_m>>;
-        template <typename _m> using write_lock_t = std::conditional_t<is_shared_lockable<mutex_t>::value, std::unique_lock<_m>, std::lock_guard<_m>>;
+        template <decayed_type M, template <typename> typename T, template <typename> typename O> //
+        using shared_or = std::conditional_t<shared_lockable<Mutex>, T<M>, O<M>>;
+
+        template <decayed_type M> //
+        using read_lock = shared_or<M, std::shared_lock, std::lock_guard>;
+
+        template <decayed_type M> //
+        using write_lock = shared_or<M, std::unique_lock, std::lock_guard>;
 
       private:
-        type_t m_value;
-        mutable mutex_t m_mutex;
+        Type m_value;
+        mutable Mutex m_mutex;
 
       public:
-        template <typename... args_t> explicit lock(args_t &&...);
+        template <typename... Args> explicit lock(Args &&...);
 
       public:
-        template <template <typename> class lock_t = write_lock_t, typename... lock_args_t> [[nodiscard]] locked<type_t, lock_t, mutex_t> write(lock_args_t &&...);
-        template <template <typename> class lock_t = read_lock_t, typename... lock_args_t> [[nodiscard]] locked<std::add_const_t<type_t>, lock_t, mutex_t> read(lock_args_t &&...) const;
+        template <template <typename> class Lock = write_lock, typename... LockArgs>
+            requires valid_arguments<Lock, Mutex, LockArgs...>
+        [[nodiscard]] locked<Type, Lock, Mutex> write(LockArgs &&...);
 
       public:
-        template <typename _type_t = type_t, typename = std::enable_if_t<std::is_move_assignable_v<_type_t>>> void assign(std::decay_t<type_t> &&);
-        template <typename _type_t = type_t, typename = std::enable_if_t<std::is_copy_assignable_v<_type_t>>> void assign(const std::decay_t<type_t> &);
+        template <template <typename> class Lock = read_lock, typename... LockArgs>
+            requires valid_arguments<Lock, Mutex, LockArgs...>
+        [[nodiscard]] locked<std::add_const_t<Type>, Lock, Mutex> read(LockArgs &&...) const;
 
       public:
-        [[nodiscard]] std::add_lvalue_reference_t<type_t> get_unsafe();
-        [[nodiscard]] std::add_lvalue_reference_t<type_t> get_unsafe() const;
+        void assign(std::decay_t<Type> &&)
+            requires std::is_move_assignable_v<Type>;
 
       public:
-        template <typename _type_t = type_t, typename = std::enable_if_t<std::is_copy_constructible_v<_type_t>>> [[nodiscard]] std::decay_t<type_t> copy();
-        template <typename _type_t = type_t, typename = std::enable_if_t<std::is_copy_constructible_v<_type_t>>> [[nodiscard]] std::decay_t<type_t> copy() const;
+        void assign(const std::decay_t<Type> &)
+            requires std::is_copy_assignable_v<Type>;
+
+      public:
+        [[nodiscard]] std::add_lvalue_reference_t<Type> get_unsafe();
+        [[nodiscard]] std::add_lvalue_reference_t<Type> get_unsafe() const;
+
+      public:
+        [[nodiscard]] std::decay_t<Type> copy()
+            requires std::is_copy_constructible_v<Type>;
+
+      public:
+        [[nodiscard]] std::decay_t<Type> copy() const
+            requires std::is_copy_constructible_v<Type>;
     };
 } // namespace lockpp
 
