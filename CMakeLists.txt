@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(lockpp LANGUAGES CXX VERSION 2.0)
+project(lockpp LANGUAGES CXX VERSION 2.1)
 
 # --------------------------------------------------------------------------------------------------------
 # Create library
@@ -21,7 +21,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE "include")
 # Run tests
 # --------------------------------------------------------------------------------------------------------
 
-option(lockpp_tests "Run tests" ON)
+option(lockpp_tests "Run tests" OFF)
 
 if (lockpp_tests)
     message(STATUS "Building lockpp tests")
