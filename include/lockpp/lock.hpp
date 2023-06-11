@@ -37,23 +37,23 @@ namespace lockpp
         [[nodiscard]] locked<std::add_const_t<Type>, Lock, Mutex> read(LockArgs &&...) const;
 
       public:
-        void assign(std::decay_t<Type> &&)
+        void assign(Type &&)
             requires std::is_move_assignable_v<Type>;
 
       public:
-        void assign(const std::decay_t<Type> &)
+        void assign(const Type &)
             requires std::is_copy_assignable_v<Type>;
 
       public:
-        [[nodiscard]] std::add_lvalue_reference_t<Type> get_unsafe();
-        [[nodiscard]] std::add_lvalue_reference_t<Type> get_unsafe() const;
+        [[nodiscard]] Type &get_unsafe();
+        [[nodiscard]] Type &get_unsafe() const;
 
       public:
-        [[nodiscard]] std::decay_t<Type> copy()
+        [[nodiscard]] Type copy()
             requires std::is_copy_constructible_v<Type>;
 
       public:
-        [[nodiscard]] std::decay_t<Type> copy() const
+        [[nodiscard]] Type copy() const
             requires std::is_copy_constructible_v<Type>;
     };
 } // namespace lockpp

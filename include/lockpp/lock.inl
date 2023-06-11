@@ -26,40 +26,40 @@ namespace lockpp
     }
 
     template <typename Type, decayed_type Mutex>
-    void lock<Type, Mutex>::assign(std::decay_t<Type> &&value)
+    void lock<Type, Mutex>::assign(Type &&value)
         requires std::is_move_assignable_v<Type>
     {
         *write() = std::move(value);
     }
 
     template <typename Type, decayed_type Mutex>
-    void lock<Type, Mutex>::assign(const std::decay_t<Type> &value)
+    void lock<Type, Mutex>::assign(const Type &value)
         requires std::is_copy_assignable_v<Type>
     {
         *write() = value;
     }
 
     template <typename Type, decayed_type Mutex> //
-    std::add_lvalue_reference_t<Type> lock<Type, Mutex>::get_unsafe()
+    Type &lock<Type, Mutex>::get_unsafe()
     {
         return m_value;
     }
 
     template <typename Type, decayed_type Mutex> //
-    std::add_lvalue_reference_t<Type> lock<Type, Mutex>::get_unsafe() const
+    Type &lock<Type, Mutex>::get_unsafe() const
     {
         return m_value;
     }
 
     template <typename Type, decayed_type Mutex>
-    std::decay_t<Type> lock<Type, Mutex>::copy()
+    Type lock<Type, Mutex>::copy()
         requires std::is_copy_constructible_v<Type>
     {
         return *read();
     }
 
     template <typename Type, decayed_type Mutex>
-    std::decay_t<Type> lock<Type, Mutex>::copy() const
+    Type lock<Type, Mutex>::copy() const
         requires std::is_copy_constructible_v<Type>
     {
         return *read();

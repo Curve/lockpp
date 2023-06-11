@@ -9,20 +9,20 @@ namespace lockpp
         template <typename, decayed_type> friend class lock;
 
       private:
+        Type &m_value;
         Lock<Mutex> m_lock;
-        std::add_lvalue_reference_t<Type> m_value;
 
       protected:
         template <typename... LockArgs> //
-        explicit locked(std::add_lvalue_reference_t<Type>, Mutex &, LockArgs &&...);
+        explicit locked(Type &, Mutex &, LockArgs &&...);
 
       public:
-        [[nodiscard]] std::add_lvalue_reference_t<Type> operator*() noexcept;
-        [[nodiscard]] std::add_lvalue_reference_t<Type> operator*() const noexcept;
+        [[nodiscard]] Type &operator*() noexcept;
+        [[nodiscard]] Type &operator*() const noexcept;
 
       public:
-        [[nodiscard]] std::add_pointer_t<Type> operator->() noexcept;
-        [[nodiscard]] std::add_pointer_t<Type> operator->() const noexcept;
+        [[nodiscard]] Type *operator->() noexcept;
+        [[nodiscard]] Type *operator->() const noexcept;
     };
 } // namespace lockpp
 
