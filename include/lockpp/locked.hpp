@@ -9,8 +9,8 @@ namespace lockpp
         template <typename, decayed_type> friend class lock;
 
       private:
-        Type &m_value;
         Lock<Mutex> m_lock;
+        Type &m_value;
 
       protected:
         template <typename... LockArgs> //
