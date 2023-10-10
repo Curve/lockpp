@@ -30,4 +30,4 @@ jobs:
         run: "mkdir build && cd build && cmake .. -Dlockpp_tests=ON && cmake --build . --config Debug"
 
       - name: Run Tests
-        run: "./build/lockpp_tests"
+        run: "./build/tests/lockpp-tests"

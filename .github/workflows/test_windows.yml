@@ -27,4 +27,4 @@ jobs:
         run: "mkdir build && cd build && cmake .. -Dlockpp_tests=ON && cmake --build . --config Debug"
 
       - name: Run Tests
-        run: "D:\\a\\lockpp\\lockpp\\build\\Debug\\lockpp_tests.exe" # Hard-code path because windows...
+        run: "./build/tests/Debug/lockpp-tests.exe"
