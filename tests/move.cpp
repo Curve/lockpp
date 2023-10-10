@@ -13,7 +13,7 @@ concept allows_copy = requires(T &t) { t.copy(); };
 // NOLINTNEXTLINE
 suite<"move"> move_suite = []()
 {
-    auto test = lockpp::lock{std::make_unique<int>(10)};
+    lockpp::lock<std::unique_ptr<int>> test{std::make_unique<int>(10)};
     auto other = std::make_unique<int>(20);
 
     using test_t = decltype(test);
