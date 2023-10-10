@@ -3,25 +3,19 @@
 
 namespace lockpp
 {
-    template <typename Type, template <typename> class Lock, typename Mutex> //
-    class locked
+    template <typename Type, typename Lock> class locked
     {
-        template <typename, decayed_type> friend class lock;
+        template <typename, decayed> friend class lock;
 
       private:
-        Lock<Mutex> m_lock;
-        Type &m_value;
+        Lock m_lock;
+        Type *m_value;
 
       protected:
-        template <typename... LockArgs> //
-        explicit locked(Type &, Mutex &, LockArgs &&...);
+        template <typename... LockArgs> locked(Type *, lock_mutex_t<Lock> &, LockArgs &&...);
 
       public:
-        [[nodiscard]] Type &operator*() noexcept;
         [[nodiscard]] Type &operator*() const noexcept;
-
-      public:
-        [[nodiscard]] Type *operator->() noexcept;
         [[nodiscard]] Type *operator->() const noexcept;
     };
 } // namespace lockpp

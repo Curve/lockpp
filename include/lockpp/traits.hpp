@@ -1,17 +1,27 @@
 #pragma once
-#include <utility>
 #include <concepts>
+#include <type_traits>
 
 namespace lockpp
 {
     template <typename T>
-    concept shared_lockable = requires(T &mutex) { mutex.lock_shared(); };
+    concept decayed = std::same_as<T, std::decay_t<T>>;
 
     template <typename T>
-    concept decayed_type = std::is_same_v<T, std::decay_t<T>>;
+    concept shared_lockable = requires(T &mutex) { mutex.lock_shared(); };
 
-    template <template <typename> typename Lock, typename Mutex, typename... Args>
-    concept valid_arguments = requires(Mutex &mutex, Args &&...args) {
-        Lock<Mutex>{mutex, std::forward<Args>(args)...};
-    };
+    template <decayed Mutex, template <typename> typename TrueType, template <typename> typename FalseType>
+    using shared_cond = std::conditional_t<shared_lockable<Mutex>, TrueType<Mutex>, FalseType<Mutex>>;
+
+    template <typename Lock>
+    consteval auto lock_mutex()
+    {
+        return []<template <typename> typename L, typename M>(L<M> *)
+        {
+            return std::type_identity<M>{};
+        }(static_cast<Lock *>(nullptr));
+    }
+
+    template <typename Lock>
+    using lock_mutex_t = typename decltype(lock_mutex<Lock>())::type;
 } // namespace lockpp
