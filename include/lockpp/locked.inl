@@ -8,7 +8,7 @@ namespace lockpp
     template <typename Type, class Lock>
     template <typename... LockArgs>
     locked<Type, Lock>::locked(Type *value, lock_mutex_t<Lock> &mutex, LockArgs &&...lock_args)
-        : m_value(value), m_lock(mutex, std::forward<LockArgs>(lock_args)...)
+        : m_lock(mutex, std::forward<LockArgs>(lock_args)...), m_value(value)
     {
     }
 

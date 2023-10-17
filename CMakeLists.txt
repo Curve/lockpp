@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(lockpp LANGUAGES CXX VERSION 2.3)
+project(lockpp LANGUAGES CXX VERSION 2.4)
 
 # --------------------------------------------------------------------------------------------------------
 # Library options
