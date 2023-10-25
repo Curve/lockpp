@@ -13,13 +13,13 @@ namespace lockpp
     }
 
     template <typename Type, class Lock>
-    [[nodiscard]] Type &locked<Type, Lock>::operator*() const noexcept
+    [[nodiscard]] Type &locked<Type, Lock>::operator*() const & noexcept
     {
         return *m_value;
     }
 
     template <typename Type, class Lock>
-    [[nodiscard]] Type *locked<Type, Lock>::operator->() const noexcept
+    [[nodiscard]] Type *locked<Type, Lock>::operator->() const & noexcept
     {
         return m_value;
     }

@@ -18,8 +18,8 @@ namespace lockpp
         locked(Type *, lock_mutex_t<Lock> &, LockArgs &&...);
 
       public:
-        [[nodiscard]] Type &operator*() const noexcept;
-        [[nodiscard]] Type *operator->() const noexcept;
+        [[nodiscard]] Type &operator*() const & noexcept;
+        [[nodiscard]] Type *operator->() const & noexcept;
     };
 } // namespace lockpp
 

@@ -28,11 +28,11 @@ namespace lockpp
 
       public:
         template <template <typename> class Lock = write_lock, typename... LockArgs>
-        [[nodiscard]] locked<Type, Lock<Mutex>> write(LockArgs &&...);
+        [[nodiscard]] locked<Type, Lock<Mutex>> write(LockArgs &&...) &;
 
       public:
         template <template <typename> class Lock = read_lock, typename... LockArgs>
-        [[nodiscard]] locked<const Type, Lock<Mutex>> read(LockArgs &&...) const;
+        [[nodiscard]] locked<const Type, Lock<Mutex>> read(LockArgs &&...) const &;
 
       public:
         template <typename O>

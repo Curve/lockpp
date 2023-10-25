@@ -11,14 +11,14 @@ namespace lockpp
 
     template <typename Type, decayed Mutex>
     template <template <typename> class Lock, typename... LockArgs>
-    locked<Type, Lock<Mutex>> lock<Type, Mutex>::write(LockArgs &&...lock_args)
+    locked<Type, Lock<Mutex>> lock<Type, Mutex>::write(LockArgs &&...lock_args) &
     {
         return {&m_value, m_mutex, std::forward<LockArgs>(lock_args)...};
     }
 
     template <typename Type, decayed Mutex>
     template <template <typename> class Lock, typename... LockArgs>
-    locked<const Type, Lock<Mutex>> lock<Type, Mutex>::read(LockArgs &&...lock_args) const
+    locked<const Type, Lock<Mutex>> lock<Type, Mutex>::read(LockArgs &&...lock_args) const &
     {
         return {&m_value, m_mutex, std::forward<LockArgs>(lock_args)...};
     }
