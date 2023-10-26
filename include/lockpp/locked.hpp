@@ -20,6 +20,9 @@ namespace lockpp
       public:
         [[nodiscard]] Type &operator*() const & noexcept;
         [[nodiscard]] Type *operator->() const & noexcept;
+
+        [[nodiscard]] Type &operator*() && noexcept = delete;
+        [[nodiscard]] Type *operator->() && noexcept = delete;
     };
 } // namespace lockpp
 

@@ -34,18 +34,26 @@ namespace lockpp
         template <template <typename> class Lock = read_lock, typename... LockArgs>
         [[nodiscard]] locked<const Type, Lock<Mutex>> read(LockArgs &&...) const &;
 
+        template <template <typename> class Lock = read_lock, typename... LockArgs>
+        [[nodiscard]] locked<const Type, Lock<Mutex>> read(LockArgs &&...) && = delete;
+
       public:
         template <typename O>
-        void assign(O &&value)
-            requires std::assignable_from<Type &, decltype(std::forward<O>(value))>;
+            void assign(O &&value) &
+                requires std::assignable_from<Type &, decltype(std::forward<O>(value))>;
 
       public:
         [[nodiscard]] Type &get_unsafe() &;
         [[nodiscard]] Type &get_unsafe() const &;
+        [[nodiscard]] Type &get_unsafe() && = delete;
 
       public:
-        [[nodiscard]] Type copy() const
+        [[nodiscard]] Type copy() const &
             requires std::copyable<Type>;
+
+        [[nodiscard]] Type copy() &&
+                requires std::copyable<Type>
+            = delete;
     };
 } // namespace lockpp
 

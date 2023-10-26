@@ -24,5 +24,9 @@ suite<"move"> move_suite = []()
     expect(not allows_assign<test_t, const std::unique_ptr<int> &>);
 
     test.assign(std::move(other));
-    expect(**test.read() == 20);
+
+    {
+        auto locked = test.read();
+        expect(**locked == 20);
+    }
 };

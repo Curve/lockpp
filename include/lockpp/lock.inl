@@ -24,11 +24,12 @@ namespace lockpp
     }
 
     template <typename Type, decayed Mutex>
-    template <typename O>
-    void lock<Type, Mutex>::assign(O &&value)
-        requires std::assignable_from<Type &, decltype(std::forward<O>(value))>
+        template <typename O>
+        void lock<Type, Mutex>::assign(O &&value) &
+            requires std::assignable_from<Type &, decltype(std::forward<O>(value))>
     {
-        *write() = std::forward<O>(value);
+        auto locked = write();
+        *locked = std::forward<O>(value);
     }
 
     template <typename Type, decayed Mutex>
@@ -44,9 +45,10 @@ namespace lockpp
     }
 
     template <typename Type, decayed Mutex>
-    Type lock<Type, Mutex>::copy() const
+    Type lock<Type, Mutex>::copy() const &
         requires std::copyable<Type>
     {
-        return *read();
+        auto locked = read();
+        return *locked;
     }
 } // namespace lockpp
