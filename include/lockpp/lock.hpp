@@ -40,7 +40,7 @@ namespace lockpp
       public:
         template <typename O>
             void assign(O &&value) &
-                requires std::assignable_from<Type &, decltype(std::forward<O>(value))>;
+                requires std::assignable_from<Type &, O>;
 
       public:
         [[nodiscard]] Type &get_unsafe() &;
