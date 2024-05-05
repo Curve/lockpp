@@ -14,8 +14,8 @@
   ```cmake
   CPMFindPackage(
     NAME           lockpp
-    VERSION        2.6
-    GIT_REPOSITORY "https://github.com/Soundux/lockpp"
+    VERSION        2.8
+    GIT_REPOSITORY "https://github.com/Curve/lockpp"
   )
   ```
 
@@ -23,10 +23,10 @@
   ```cmake
   include(FetchContent)
 
-  FetchContent_Declare(lockpp GIT_REPOSITORY "https://github.com/Soundux/lockpp" GIT_TAG v2.6)
+  FetchContent_Declare(lockpp GIT_REPOSITORY "https://github.com/Curve/lockpp" GIT_TAG v2.8)
   FetchContent_MakeAvailable(lockpp)
 
-  target_link_libraries(<target> lockpp)
+  target_link_libraries(<target> cr::lockpp)
   ```
 
 ## 📃 Usage

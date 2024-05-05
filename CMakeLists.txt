@@ -12,7 +12,7 @@ option(lockpp_tests "Run tests" OFF)
 # --------------------------------------------------------------------------------------------------------
 
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(soundux::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(cr::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)

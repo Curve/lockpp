@@ -31,4 +31,4 @@ CPMFindPackage(
   OPTIONS        "BOOST_UT_DISABLE_MODULE ON"
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Boost::ut soundux::lockpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE Boost::ut cr::lockpp)
