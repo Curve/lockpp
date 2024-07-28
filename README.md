@@ -5,8 +5,12 @@
 <br/>
 
 <p align="center">
-    A C++20 library providing mutex protection for any object
+    A C++23 library providing mutex protection for any object
 </p>
+
+
+> [!NOTE]
+> See versions <`3.0` for C++20 support!
 
 ## 📦 Installation
 
@@ -14,7 +18,7 @@
   ```cmake
   CPMFindPackage(
     NAME           lockpp
-    VERSION        2.8
+    VERSION        3.0
     GIT_REPOSITORY "https://github.com/Curve/lockpp"
   )
   ```
@@ -23,7 +27,7 @@
   ```cmake
   include(FetchContent)
 
-  FetchContent_Declare(lockpp GIT_REPOSITORY "https://github.com/Curve/lockpp" GIT_TAG v2.8)
+  FetchContent_Declare(lockpp GIT_REPOSITORY "https://github.com/Curve/lockpp" GIT_TAG v3.0)
   FetchContent_MakeAvailable(lockpp)
 
   target_link_libraries(<target> cr::lockpp)
