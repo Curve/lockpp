@@ -1,4 +1,5 @@
 #include <boost/ut.hpp>
+
 #include <lockpp/lock.hpp>
 
 using namespace boost::ut;

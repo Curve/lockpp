@@ -8,8 +8,8 @@ project(lockpp-tests  LANGUAGES CXX)
 add_executable(${PROJECT_NAME})
 add_executable(lockpp::tests ALIAS ${PROJECT_NAME})
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23 CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
 
 # --------------------------------------------------------------------------------------------------------
 # Add Sources
@@ -26,7 +26,7 @@ include("../cmake/cpm.cmake")
 
 CPMFindPackage(
   NAME           ut
-  VERSION        2.0.0
+  VERSION        2.1.0
   GIT_REPOSITORY "https://github.com/boost-ext/ut"
   OPTIONS        "BOOST_UT_DISABLE_MODULE ON"
 )

@@ -1,5 +1,6 @@
-#include <future>
 #include <boost/ut.hpp>
+
+#include <future>
 #include <lockpp/lock.hpp>
 
 using namespace boost::ut;
@@ -42,6 +43,7 @@ suite<"custom-lock"> custom_lock_suite = []()
 
         thread.detach();
 
-        expect(result.get_future().wait_for(std::chrono::seconds(5)) != std::future_status::ready);
+        auto status = result.get_future().wait_for(std::chrono::seconds(5));
+        expect(status != std::future_status::ready);
     };
 };

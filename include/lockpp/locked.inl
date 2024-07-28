@@ -1,26 +1,38 @@
 #pragma once
-#include "locked.hpp"
 
+#include "locked.hpp"
 #include <utility>
 
 namespace lockpp
 {
-    template <typename Type, class Lock>
-    template <typename... LockArgs>
-    locked<Type, Lock>::locked(Type *value, lock_mutex_t<Lock> &mutex, LockArgs &&...lock_args)
-        : m_lock(mutex, std::forward<LockArgs>(lock_args)...), m_value(value)
+    template <typename T, class Lock>
+    template <typename Mutex, typename... Ts>
+    locked<T, Lock>::locked(T *value, Mutex &mutex, Ts &&...lock_args)
+        : m_lock(mutex, std::forward<Ts>(lock_args)...), m_value(value)
     {
     }
 
-    template <typename Type, class Lock>
-    [[nodiscard]] Type &locked<Type, Lock>::operator*() const & noexcept
+    template <typename T, class Lock>
+    template <typename Self>
+        requires std::is_lvalue_reference_v<Self>
+    [[nodiscard]] T &locked<T, Lock>::value(this Self &&self) noexcept
     {
-        return *m_value;
+        return *self.m_value;
     }
 
-    template <typename Type, class Lock>
-    [[nodiscard]] Type *locked<Type, Lock>::operator->() const & noexcept
+    template <typename T, class Lock>
+    template <typename Self>
+        requires std::is_lvalue_reference_v<Self>
+    [[nodiscard]] T &locked<T, Lock>::operator*(this Self &&self) noexcept
     {
-        return m_value;
+        return self.value();
+    }
+
+    template <typename T, class Lock>
+    template <typename Self>
+        requires std::is_lvalue_reference_v<Self>
+    [[nodiscard]] T *locked<T, Lock>::operator->(this Self &&self) noexcept
+    {
+        return self.m_value;
     }
 } // namespace lockpp

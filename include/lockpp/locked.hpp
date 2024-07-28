@@ -1,28 +1,36 @@
 #pragma once
-#include "traits.hpp"
+
+#include <type_traits>
 
 namespace lockpp
 {
-    template <typename Type, typename Lock>
+    template <typename T, typename Lock>
     class locked
     {
-        template <typename, decayed>
+        template <typename, typename>
         friend class lock;
 
       private:
         Lock m_lock;
-        Type *m_value;
+        T *m_value;
 
       protected:
-        template <typename... LockArgs>
-        locked(Type *, lock_mutex_t<Lock> &, LockArgs &&...);
+        template <typename Mutex, typename... Ts>
+        locked(T *, Mutex &, Ts &&...);
 
       public:
-        [[nodiscard]] Type &operator*() const & noexcept;
-        [[nodiscard]] Type *operator->() const & noexcept;
+        template <typename Self>
+            requires std::is_lvalue_reference_v<Self>
+        [[nodiscard]] T &value(this Self &&) noexcept;
 
-        [[nodiscard]] Type &operator*() && noexcept = delete;
-        [[nodiscard]] Type *operator->() && noexcept = delete;
+      public:
+        template <typename Self>
+            requires std::is_lvalue_reference_v<Self>
+        [[nodiscard]] T &operator*(this Self &&) noexcept;
+
+        template <typename Self>
+            requires std::is_lvalue_reference_v<Self>
+        [[nodiscard]] T *operator->(this Self &&) noexcept;
     };
 } // namespace lockpp
 
