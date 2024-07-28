@@ -1,0 +1,55 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.yml"
+
+  pull_request:
+    branches: [master]
+
+name: 🧪 Test on Linux
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        config: [Release, Debug]
+        type: [gcc, clang, msvc, clang-cl]
+
+        include:
+          - type: gcc
+            container: alpine:latest
+            deps: apk add git cmake gcc g++ ninja-build make
+
+          - type: clang
+            container: alpine:latest
+            deps: apk add git cmake clang ninja-build make
+
+          - type: clang-cl
+            cmake_args: -T ClangCL -A x64
+
+    runs-on: ${{ (contains(matrix.type, 'msvc') || contains(matrix.type, 'clang-cl')) && 'windows-latest' || 'ubuntu-latest' }}
+    container: ${{ matrix.container }}
+
+    name: "${{ matrix.type }} (⚙️: ${{ matrix.config }})"
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🧰 Dependencies
+        run: ${{ matrix.deps }}
+
+      - name: 🔧 Compile
+        run: |
+          cmake -B build -Dlockpp_tests=ON ${{ matrix.cmake_args }}
+          cmake --build build --config ${{ matrix.config }}
+
+      - name: 🔬 Run Tests
+        run: |
+          ctest --test-dir build/tests -C ${{ matrix.config }} --verbose

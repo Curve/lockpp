@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(lockpp-tests  LANGUAGES CXX)
+project(lockpp-tests LANGUAGES CXX)
 
 # --------------------------------------------------------------------------------------------------------
 # Create executable
@@ -32,3 +32,11 @@ CPMFindPackage(
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Boost::ut cr::lockpp)
+
+# --------------------------------------------------------------------------------------------------------
+# Add Test-Target
+# --------------------------------------------------------------------------------------------------------
+
+include(CTest)
+
+add_test(NAME lockpp-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
