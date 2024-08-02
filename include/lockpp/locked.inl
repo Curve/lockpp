@@ -13,26 +13,20 @@ namespace lockpp
     }
 
     template <typename T, class Lock>
-    template <typename Self>
-        requires std::is_lvalue_reference_v<Self>
-    [[nodiscard]] T &locked<T, Lock>::value(this Self &&self) noexcept
+    [[nodiscard]] T &locked<T, Lock>::value() const &
     {
-        return *self.m_value;
+        return *m_value;
     }
 
     template <typename T, class Lock>
-    template <typename Self>
-        requires std::is_lvalue_reference_v<Self>
-    [[nodiscard]] T &locked<T, Lock>::operator*(this Self &&self) noexcept
+    [[nodiscard]] T &locked<T, Lock>::operator*() const &
     {
-        return self.value();
+        return value();
     }
 
     template <typename T, class Lock>
-    template <typename Self>
-        requires std::is_lvalue_reference_v<Self>
-    [[nodiscard]] T *locked<T, Lock>::operator->(this Self &&self) noexcept
+    [[nodiscard]] T *locked<T, Lock>::operator->() const &
     {
-        return self.m_value;
+        return m_value;
     }
 } // namespace lockpp

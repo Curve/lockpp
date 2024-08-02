@@ -29,7 +29,7 @@ suite<"basic"> assign_copy_suite = []()
 
     should("be readable") = [&]
     {
-        auto locked = test.read();
+        const auto locked = test.read();
 
         expect(*locked == "b");
         expect(locked.value() == "b");
@@ -44,6 +44,10 @@ suite<"basic"> assign_copy_suite = []()
         expect(locked->empty());
         expect(locked.value().empty());
         expect(test.get_unsafe().empty());
+
+        locked.value() = "Writable";
+        expect(*locked == "Writable");
+        expect(locked.value() == "Writable");
 
         expect(std::same_as<decltype(*locked), std::string &>);
     };

@@ -18,11 +18,10 @@ namespace lockpp
     }
 
     template <typename T, typename Mutex>
-    template <template <typename> class Lock, typename Self, typename... Ts>
-        requires std::is_lvalue_reference_v<Self>
-    locked<const T, Lock<Mutex>> lock<T, Mutex>::read(this Self &&self, Ts &&...lock_args)
+    template <template <typename> class Lock, typename... Ts>
+    locked<const T, Lock<Mutex>> lock<T, Mutex>::read(Ts &&...lock_args) const &
     {
-        return {&self.m_value, self.m_mutex, std::forward<Ts>(lock_args)...};
+        return {&m_value, m_mutex, std::forward<Ts>(lock_args)...};
     }
 
     template <typename T, typename Mutex>
@@ -35,19 +34,21 @@ namespace lockpp
     }
 
     template <typename T, typename Mutex>
-    template <typename Self>
-        requires std::is_lvalue_reference_v<Self>
-    T &lock<T, Mutex>::get_unsafe(this Self &&self)
+    T &lock<T, Mutex>::get_unsafe() &
     {
-        return self.m_value;
+        return m_value;
     }
 
     template <typename T, typename Mutex>
-    template <typename Self>
-        requires std::is_lvalue_reference_v<Self> and std::copyable<T>
-    T lock<T, Mutex>::copy(this Self &&self)
+    T &lock<T, Mutex>::get_unsafe() const &
     {
-        auto locked = self.read();
+        return m_value;
+    }
+
+    template <typename T, typename Mutex>
+    T lock<T, Mutex>::copy() const &
+    {
+        auto locked = read();
         return *locked;
     }
 } // namespace lockpp

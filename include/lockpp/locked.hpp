@@ -1,7 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
 namespace lockpp
 {
     template <typename T, typename Lock>
@@ -19,18 +17,16 @@ namespace lockpp
         locked(T *, Mutex &, Ts &&...);
 
       public:
-        template <typename Self>
-            requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] T &value(this Self &&) noexcept;
+        [[nodiscard]] T &value() const &;
+        [[nodiscard]] T &value() const && = delete;
 
       public:
-        template <typename Self>
-            requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] T &operator*(this Self &&) noexcept;
+        [[nodiscard]] T &operator*() const &;
+        [[nodiscard]] T &operator*() const && = delete;
 
-        template <typename Self>
-            requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] T *operator->(this Self &&) noexcept;
+      public:
+        [[nodiscard]] T *operator->() const &;
+        [[nodiscard]] T *operator->() const && = delete;
     };
 } // namespace lockpp
 

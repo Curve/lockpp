@@ -5,12 +5,8 @@
 <br/>
 
 <p align="center">
-    A C++23 library providing mutex protection for any object
+    A C++20 library providing mutex protection for any object
 </p>
-
-
-> [!NOTE]
-> See versions <`3.0` for C++20 support!
 
 ## 📦 Installation
 

@@ -27,9 +27,11 @@ namespace lockpp
         [[nodiscard]] locked<T, Lock<Mutex>> write(Ts &&...) &;
 
       public:
-        template <template <typename> class Lock = read_lock, typename Self, typename... Ts>
-            requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] locked<const T, Lock<Mutex>> read(this Self &&, Ts &&...);
+        template <template <typename> class Lock = read_lock, typename... Ts>
+        [[nodiscard]] locked<const T, Lock<Mutex>> read(Ts &&...) const &;
+
+        template <template <typename> class Lock = read_lock, typename... Ts>
+        [[nodiscard]] locked<const T, Lock<Mutex>> read(Ts &&...) const && = delete;
 
       public:
         template <typename O>
@@ -37,14 +39,15 @@ namespace lockpp
         void assign(O &&value) &;
 
       public:
-        template <typename Self>
-            requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] T &get_unsafe(this Self &&);
+        [[nodiscard]] T &get_unsafe() &;
+        [[nodiscard]] T &get_unsafe() && = delete;
+
+        [[nodiscard]] T &get_unsafe() const &;
+        [[nodiscard]] T &get_unsafe() const && = delete;
 
       public:
-        template <typename Self>
-            requires std::is_lvalue_reference_v<Self> and std::copyable<T>
-        [[nodiscard]] T copy(this Self &&);
+        [[nodiscard]] T copy() const &;
+        [[nodiscard]] T copy() const && = delete;
     };
 } // namespace lockpp
 

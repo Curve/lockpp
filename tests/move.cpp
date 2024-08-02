@@ -8,9 +8,6 @@ using namespace boost::ut::literals;
 template <typename T, typename O>
 concept can_assign = requires(T value, O &&other) { value.assign(std::forward<O>(other)); };
 
-template <typename T>
-concept can_copy = requires(T &value) { value.copy(); };
-
 // NOLINTNEXTLINE
 suite<"move"> move_suite = []()
 {
@@ -18,8 +15,6 @@ suite<"move"> move_suite = []()
     auto other = std::make_unique<int>(20);
 
     using T = decltype(test);
-
-    expect(not can_copy<T>);
 
     expect(can_assign<T, std::unique_ptr<int> &&>);
     expect(not can_assign<T, std::unique_ptr<int> &>);
