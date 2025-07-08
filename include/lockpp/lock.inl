@@ -1,23 +1,24 @@
 #pragma once
 
 #include "lock.hpp"
+#include "locked.hpp"
 
 namespace lockpp
 {
     namespace
     {
         template <typename T>
-        decltype(auto) unwrap(T &&value)
+        decltype(auto) unwrap(T &value)
         {
             if constexpr (requires(T &value) {
                               { *value };
                           })
             {
-                return *std::forward<T>(value);
+                return *value;
             }
             else
             {
-                return std::forward<T>(value);
+                return value;
             }
         }
     } // namespace
@@ -31,17 +32,18 @@ namespace lockpp
 
     template <typename T, typename Mutex>
     template <template <typename> class Lock, typename... Ts>
-    locked<T, Lock<Mutex>> lock<T, Mutex>::write(Ts &&...lock_args) &
+    auto lock<T, Mutex>::write(Ts &&...lock_args) &
     {
-        return {&m_value, unwrap(m_mutex), std::forward<Ts>(lock_args)...};
+        return locked<T, Lock<mutex>>{std::addressof(m_value), unwrap(m_mutex), std::forward<Ts>(lock_args)...};
     }
 
     template <typename T, typename Mutex>
     template <template <typename> class Lock, typename Self, typename... Ts>
         requires std::is_lvalue_reference_v<Self>
-    locked<const T, Lock<Mutex>> lock<T, Mutex>::read(this Self &&self, Ts &&...lock_args)
+    auto lock<T, Mutex>::read(this Self &&self, Ts &&...lock_args)
     {
-        return {&self.m_value, unwrap(std::forward<Self>(self).m_mutex), std::forward<Ts>(lock_args)...};
+        return locked<const T, Lock<mutex>>{std::addressof(std::forward<Self>(self).m_value),
+                                            unwrap(std::forward<Self>(self).m_mutex), std::forward<Ts>(lock_args)...};
     }
 
     template <typename T, typename Mutex>

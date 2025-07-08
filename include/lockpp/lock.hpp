@@ -1,13 +1,14 @@
 #pragma once
 
 #include "traits.hpp"
-#include "locked.hpp"
 
 namespace lockpp
 {
     template <typename T, typename Mutex = std::shared_mutex>
     struct lock
     {
+        using mutex = traits<Mutex>::mutex;
+
         template <typename>
         using read_lock = traits<Mutex>::read_lock;
 
@@ -30,12 +31,12 @@ namespace lockpp
 
       public:
         template <template <typename> class Lock = write_lock, typename... Ts>
-        [[nodiscard]] locked<T, Lock<Mutex>> write(Ts &&...) &;
+        [[nodiscard]] auto write(Ts &&...) &;
 
       public:
         template <template <typename> class Lock = read_lock, typename Self, typename... Ts>
             requires std::is_lvalue_reference_v<Self>
-        [[nodiscard]] locked<const T, Lock<Mutex>> read(this Self &&, Ts &&...);
+        [[nodiscard]] auto read(this Self &&, Ts &&...);
 
       public:
         template <typename O>
