@@ -3,10 +3,10 @@
 namespace lockpp
 {
     template <typename T, typename Lock>
-    class locked
+    struct locked
     {
         template <typename, typename>
-        friend class lock;
+        friend struct lock;
 
       private:
         Lock m_lock;

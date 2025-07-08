@@ -6,48 +6,51 @@
 namespace lockpp
 {
     template <typename T, typename Mutex = std::shared_mutex>
-    class lock
+    struct lock
     {
         template <typename>
-        using read_lock = mutex_traits<Mutex>::read_lock;
+        using read_lock = traits<Mutex>::read_lock;
 
         template <typename>
-        using write_lock = mutex_traits<Mutex>::write_lock;
+        using write_lock = traits<Mutex>::write_lock;
 
       private:
         T m_value;
-        mutable Mutex m_mutex;
+        mutable Mutex m_mutex{traits<Mutex>::make()};
+
+      public:
+        lock()                                                          = default;
+        lock(const lock &)                                              = default;
+        lock(lock &&) noexcept(std::is_nothrow_move_constructible_v<T>) = default;
 
       public:
         template <typename... Ts>
-        explicit lock(Ts &&...);
+            requires std::constructible_from<T, Ts...>
+        lock(Ts &&...);
 
       public:
         template <template <typename> class Lock = write_lock, typename... Ts>
         [[nodiscard]] locked<T, Lock<Mutex>> write(Ts &&...) &;
 
       public:
-        template <template <typename> class Lock = read_lock, typename... Ts>
-        [[nodiscard]] locked<const T, Lock<Mutex>> read(Ts &&...) const &;
-
-        template <template <typename> class Lock = read_lock, typename... Ts>
-        [[nodiscard]] locked<const T, Lock<Mutex>> read(Ts &&...) const && = delete;
+        template <template <typename> class Lock = read_lock, typename Self, typename... Ts>
+            requires std::is_lvalue_reference_v<Self>
+        [[nodiscard]] locked<const T, Lock<Mutex>> read(this Self &&, Ts &&...);
 
       public:
         template <typename O>
             requires std::assignable_from<T &, O>
-        void assign(O &&value) &;
+        void assign(O &&) &;
 
       public:
-        [[nodiscard]] T &get_unsafe() &;
-        [[nodiscard]] T &get_unsafe() && = delete;
-
-        [[nodiscard]] T &get_unsafe() const &;
-        [[nodiscard]] T &get_unsafe() const && = delete;
+        template <typename Self>
+            requires std::is_lvalue_reference_v<Self>
+        [[nodiscard]] T &get_unsafe(this Self &&);
 
       public:
-        [[nodiscard]] T copy() const &;
-        [[nodiscard]] T copy() const && = delete;
+        template <typename Self>
+            requires std::is_lvalue_reference_v<Self> and std::copyable<T>
+        [[nodiscard]] T copy(this Self &&);
     };
 } // namespace lockpp
 
